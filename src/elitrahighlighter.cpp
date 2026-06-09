@@ -1,22 +1,23 @@
 #include "elitrahighlighter.h"
+#include "colors.h"
 
 ElitraHighlighter::ElitraHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
-    keywordFormat.setForeground(QColor("#bb9af7"));
+    keywordFormat.setForeground(QColor(Colors::synKeyword));
     keywordFormat.setFontWeight(QFont::Bold);
 
-    typeFormat.setForeground(QColor("#7dcfff"));
+    typeFormat.setForeground(QColor(Colors::synType));
     typeFormat.setFontWeight(QFont::Bold);
 
-    numberFormat.setForeground(QColor("#ff9e64"));
+    numberFormat.setForeground(QColor(Colors::synNumber));
 
-    builtinFormat.setForeground(QColor("#7aa2f7"));
+    builtinFormat.setForeground(QColor(Colors::synBuiltin));
 
-    singleLineCommentFormat.setForeground(QColor("#565f89"));
+    singleLineCommentFormat.setForeground(QColor(Colors::synComment));
     singleLineCommentFormat.setFontItalic(true);
 
-    interpolationFormat.setForeground(QColor("#9ece6a"));
+    interpolationFormat.setForeground(QColor(Colors::synString));
 
     HighlightRule rule;
 
@@ -34,7 +35,7 @@ ElitraHighlighter::ElitraHighlighter(QTextDocument *parent)
     }
 
     auto boolFormat = keywordFormat;
-    boolFormat.setForeground(QColor("#ff9e64"));
+    boolFormat.setForeground(QColor(Colors::synNumber));
     rule.pattern = QRegularExpression("\\btrue\\b|\\bfalse\\b");
     rule.format = boolFormat;
     rules.append(rule);
@@ -54,7 +55,7 @@ ElitraHighlighter::ElitraHighlighter(QTextDocument *parent)
     rules.append(rule);
 
     auto fnCallFormat = QTextCharFormat();
-    fnCallFormat.setForeground(QColor("#7aa2f7"));
+    fnCallFormat.setForeground(QColor(Colors::synFunction));
     rule.pattern = QRegularExpression(
         "\\b(?!let\\b|fn\\b|if\\b|else\\b|while\\b|for\\b|in\\b|return\\b"
         "|nil\\b|break\\b|continue\\b|import\\b|match\\b|try\\b|catch\\b"
@@ -69,12 +70,12 @@ ElitraHighlighter::ElitraHighlighter(QTextDocument *parent)
     rule.format = singleLineCommentFormat;
     rules.append(rule);
 
-    multiLineCommentFormat.setForeground(QColor("#565f89"));
+    multiLineCommentFormat.setForeground(QColor(Colors::synComment));
     multiLineCommentFormat.setFontItalic(true);
     commentStartExpr = QRegularExpression("/\\*");
     commentEndExpr = QRegularExpression("\\*/");
 
-    stringFormat.setForeground(QColor("#9ece6a"));
+    stringFormat.setForeground(QColor(Colors::synString));
     stringStartExpr = QRegularExpression("\"");
     stringEndExpr = QRegularExpression("\"");
 }
@@ -133,7 +134,7 @@ void ElitraHighlighter::highlightBlock(const QString &text)
                     if (text[i] == '"') {
                         auto fmt = stringFormat;
                         if (text.mid(start + 1, i - start - 1).contains('{'))
-                            fmt.setForeground(QColor("#e0af68"));
+                            fmt.setForeground(QColor(Colors::synAttribute));
                         setFormat(start, i - start + 1, fmt);
                         inString = false;
                         i++;

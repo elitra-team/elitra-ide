@@ -41,12 +41,33 @@ template <> constexpr inline auto OutputPanel::qt_create_metaobjectdata<qt_meta_
     QtMocHelpers::StringRefStorage qt_stringData {
         "OutputPanel",
         "stopRequested",
-        ""
+        "",
+        "problemActivated",
+        "filePath",
+        "line",
+        "onTabClicked",
+        "index",
+        "onProblemItemActivated",
+        "QTreeWidgetItem*",
+        "item",
+        "column"
     };
 
     QtMocHelpers::UintData qt_methods {
         // Signal 'stopRequested'
         QtMocHelpers::SignalData<void()>(1, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'problemActivated'
+        QtMocHelpers::SignalData<void(const QString &, int)>(3, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 4 }, { QMetaType::Int, 5 },
+        }}),
+        // Slot 'onTabClicked'
+        QtMocHelpers::SlotData<void(int)>(6, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 7 },
+        }}),
+        // Slot 'onProblemItemActivated'
+        QtMocHelpers::SlotData<void(QTreeWidgetItem *, int)>(8, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 9, 10 }, { QMetaType::Int, 11 },
+        }}),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -71,11 +92,16 @@ void OutputPanel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->stopRequested(); break;
+        case 1: _t->problemActivated((*reinterpret_cast<std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2]))); break;
+        case 2: _t->onTabClicked((*reinterpret_cast<std::add_pointer_t<int>>(_a[1]))); break;
+        case 3: _t->onProblemItemActivated((*reinterpret_cast<std::add_pointer_t<QTreeWidgetItem*>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2]))); break;
         default: ;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
         if (QtMocHelpers::indexOfMethod<void (OutputPanel::*)()>(_a, &OutputPanel::stopRequested, 0))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (OutputPanel::*)(const QString & , int )>(_a, &OutputPanel::problemActivated, 1))
             return;
     }
 }
@@ -99,14 +125,14 @@ int OutputPanel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 4;
     }
     return _id;
 }
@@ -115,5 +141,11 @@ int OutputPanel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 void OutputPanel::stopRequested()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
+}
+
+// SIGNAL 1
+void OutputPanel::problemActivated(const QString & _t1, int _t2)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 1, nullptr, _t1, _t2);
 }
 QT_WARNING_POP

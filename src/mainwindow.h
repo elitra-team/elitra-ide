@@ -3,18 +3,23 @@
 
 #include <QMainWindow>
 #include <QTabWidget>
-#include <QTreeView>
-#include <QFileSystemModel>
 #include <QSplitter>
 #include <QProcess>
 #include <QAction>
-#include <QToolBar>
 #include <QStatusBar>
 #include <QLabel>
 #include <QMap>
+#include <QLineEdit>
 
 class CodeEditor;
 class OutputPanel;
+class FindReplacePanel;
+class FindInFilesPanel;
+class LspClient;
+class Sidebar;
+class StatusBarManager;
+
+#include "activitybar.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -37,11 +42,21 @@ private slots:
     void onProcessOutput();
     void onProcessError();
 
+    void showFind();
+    void showReplace();
+    void showFindInFiles();
+    void showGoToLine();
+    void showSettings();
+    void applySettings();
+
+    void onViewToggled(ActivityBar::View view);
+    void onCursorMoved(int line, int col);
+    void updateStatusBar();
+
 private:
     void setupUI();
     void setupMenuBar();
-    void setupToolBar();
-    void setupFileBrowser();
+    void setupActions();
     void setupStyleSheet();
     void loadFileToEditor(const QString &filePath);
     bool saveEditorToFile(int tabIndex);
@@ -52,24 +67,41 @@ private:
     QString readFile(const QString &path);
     bool writeFile(const QString &path, const QString &content);
 
-    QSplitter *splitter;
-    QTreeView *fileTree;
-    QFileSystemModel *fileModel;
+    void setupFindReplace();
+    void setupFindInFiles();
+    void setupLsp();
+    QString editorUri(const QString &filePath);
+    void updateLspDiagnostics(const QString &uri, const QJsonArray &diagnostics);
+
+    // Layout
+    ActivityBar *activityBar;
+    Sidebar *sidebar;
+    QSplitter *editorSplitter;
     QTabWidget *tabWidget;
     OutputPanel *outputPanel;
+    FindReplacePanel *findReplacePanel;
+    FindInFilesPanel *findInFilesPanel;
+    StatusBarManager *statusBarManager;
 
-    QToolBar *toolBar;
+    // Actions
     QAction *runAction;
     QAction *stopAction;
 
+    // Process
     QProcess *process;
     QString currentRunFile;
 
+    // Files
     QMap<int, QString> filePaths;
     int untitledCount = 1;
 
+    // Paths
     QString elitraBinary;
     QString workspaceDir;
+
+    // LSP
+    LspClient *lspClient;
+    bool lspEnabled = false;
 };
 
 #endif

@@ -56,7 +56,20 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "QProcess::ExitStatus",
         "status",
         "onProcessOutput",
-        "onProcessError"
+        "onProcessError",
+        "showFind",
+        "showReplace",
+        "showFindInFiles",
+        "showGoToLine",
+        "showSettings",
+        "applySettings",
+        "onViewToggled",
+        "ActivityBar::View",
+        "view",
+        "onCursorMoved",
+        "line",
+        "col",
+        "updateStatusBar"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -88,6 +101,28 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         QtMocHelpers::SlotData<void()>(16, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onProcessError'
         QtMocHelpers::SlotData<void()>(17, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'showFind'
+        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'showReplace'
+        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'showFindInFiles'
+        QtMocHelpers::SlotData<void()>(20, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'showGoToLine'
+        QtMocHelpers::SlotData<void()>(21, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'showSettings'
+        QtMocHelpers::SlotData<void()>(22, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'applySettings'
+        QtMocHelpers::SlotData<void()>(23, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onViewToggled'
+        QtMocHelpers::SlotData<void(ActivityBar::View)>(24, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 25, 26 },
+        }}),
+        // Slot 'onCursorMoved'
+        QtMocHelpers::SlotData<void(int, int)>(27, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { QMetaType::Int, 28 }, { QMetaType::Int, 29 },
+        }}),
+        // Slot 'updateStatusBar'
+        QtMocHelpers::SlotData<void()>(30, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -122,6 +157,15 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->onProcessFinished((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QProcess::ExitStatus>>(_a[2]))); break;
         case 9: _t->onProcessOutput(); break;
         case 10: _t->onProcessError(); break;
+        case 11: _t->showFind(); break;
+        case 12: _t->showReplace(); break;
+        case 13: _t->showFindInFiles(); break;
+        case 14: _t->showGoToLine(); break;
+        case 15: _t->showSettings(); break;
+        case 16: _t->applySettings(); break;
+        case 17: _t->onViewToggled((*reinterpret_cast<std::add_pointer_t<ActivityBar::View>>(_a[1]))); break;
+        case 18: _t->onCursorMoved((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<int>>(_a[2]))); break;
+        case 19: _t->updateStatusBar(); break;
         default: ;
         }
     }
@@ -146,14 +190,14 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 20;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 20)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 11;
+        _id -= 20;
     }
     return _id;
 }

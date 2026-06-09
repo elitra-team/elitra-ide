@@ -1,53 +1,123 @@
 #include "outputpanel.h"
+#include "colors.h"
+#include <QHeaderView>
+#include <QFileInfo>
 
 OutputPanel::OutputPanel(QWidget *parent)
     : QWidget(parent)
 {
+    setStyleSheet(
+        "OutputPanel { background-color: #1a1a1e; }"
+    );
+
     auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
-    auto *header = new QWidget;
-    header->setStyleSheet("background-color: #1f2133; border-bottom: 1px solid #16171f;");
-    auto *headerLayout = new QHBoxLayout(header);
-    headerLayout->setContentsMargins(12, 5, 8, 5);
+    // ── Tab Bar ──
+    tabBar = new QWidget;
+    tabBar->setFixedHeight(28);
+    tabBar->setStyleSheet("background-color: #242428;");
+    auto *tabLayout = new QHBoxLayout(tabBar);
+    tabLayout->setContentsMargins(0, 0, 0, 0);
+    tabLayout->setSpacing(0);
 
-    titleLabel = new QLabel("Output");
-    titleLabel->setStyleSheet("color: #565f89; font-weight: 600; font-size: 11px; "
-                              "text-transform: uppercase; letter-spacing: 0.5px;");
-    headerLayout->addWidget(titleLabel);
-    headerLayout->addStretch();
+    tabLayout->addWidget(createTabBtn("OUTPUT", 0));
+    tabLayout->addWidget(createTabBtn("PROBLEMS", 1));
+    tabLayout->addStretch();
 
-    stopBtn = new QPushButton(" Stop");
-    stopBtn->setVisible(false);
-    stopBtn->setStyleSheet(
-        "QPushButton { background-color: #f7768e; color: #1a1b26; border: none; "
-        "padding: 3px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; }"
-        "QPushButton:hover { background-color: #ff9eb0; }"
-    );
-    headerLayout->addWidget(stopBtn);
-
-    clearBtn = new QPushButton("Clear");
+    clearBtn = new QPushButton("\u2715");
+    clearBtn->setFixedSize(22, 22);
+    clearBtn->setToolTip("Clear");
+    clearBtn->setCursor(Qt::PointingHandCursor);
     clearBtn->setStyleSheet(
-        "QPushButton { background-color: transparent; color: #565f89; border: 1px solid #2f3346; "
-        "padding: 3px 12px; border-radius: 4px; font-size: 11px; }"
-        "QPushButton:hover { background-color: #2a2c3e; color: #a9b1d6; border-color: #3b4261; }"
+        "QPushButton { background: transparent; color: #9e9e9e; border: none; font-size: 11px; }"
+        "QPushButton:hover { color: #d4d4d4; }"
     );
-    headerLayout->addWidget(clearBtn);
+    tabLayout->addWidget(clearBtn);
 
-    layout->addWidget(header);
+    layout->addWidget(tabBar);
 
+    // ── Stack ──
+    stack = new QStackedWidget;
+
+    // Output page
     output = new QPlainTextEdit;
     output->setReadOnly(true);
+    output->setFrameShape(QFrame::NoFrame);
     output->setStyleSheet(
-        "QPlainTextEdit { background-color: #1a1b26; color: #a9b1d6; "
-        "border: none; padding: 8px 12px; font-family: 'JetBrains Mono', 'Consolas', monospace; "
-        "font-size: 12px; selection-background-color: #e5a06d; selection-color: #1a1b26; }"
+        "QPlainTextEdit { background-color: #1a1a1e; color: #d4d4d4; "
+        "border: none; padding: 6px 10px; font-family: 'JetBrains Mono', monospace; "
+        "font-size: 12px; selection-background-color: #3d3d42; selection-color: #ffffff; }"
     );
-    layout->addWidget(output);
+    stack->addWidget(output);
 
-    connect(clearBtn, &QPushButton::clicked, this, &OutputPanel::clearOutput);
-    connect(stopBtn, &QPushButton::clicked, this, &OutputPanel::stopRequested);
+    // Problems page
+    problemTree = new QTreeWidget;
+    problemTree->setFrameShape(QFrame::NoFrame);
+    problemTree->setHeaderHidden(true);
+    problemTree->setRootIsDecorated(false);
+    problemTree->setAlternatingRowColors(false);
+    problemTree->setIndentation(16);
+    problemTree->setStyleSheet(
+        "QTreeWidget { background-color: #1a1a1e; color: #d4d4d4; border: none; "
+        "font-size: 12px; font-family: 'JetBrains Mono'; }"
+        "QTreeWidget::item { padding: 2px 8px; }"
+        "QTreeWidget::item:selected { background-color: #3d3d42; color: #ffffff; }"
+    );
+    stack->addWidget(problemTree);
+
+    layout->addWidget(stack, 1);
+
+    connect(clearBtn, &QPushButton::clicked, this, [this]() {
+        if (activeTab == 0) clearOutput();
+        else clearProblems();
+    });
+
+    connect(problemTree, &QTreeWidget::itemActivated,
+            this, &OutputPanel::onProblemItemActivated);
+
+    setActiveTab(0);
+}
+
+QPushButton *OutputPanel::createTabBtn(const QString &text, int index)
+{
+    auto *btn = new QPushButton(text);
+    btn->setFixedHeight(28);
+    btn->setCursor(Qt::PointingHandCursor);
+    btn->setStyleSheet(
+        "QPushButton { background: transparent; color: #9e9e9e; border: none; "
+        "border-bottom: 2px solid transparent; padding: 0 14px; font-size: 11px; "
+        "font-weight: 600; letter-spacing: 0.3px; }"
+        "QPushButton:hover { color: #d4d4d4; }"
+    );
+
+    connect(btn, &QPushButton::clicked, this, [this, index]() {
+        setActiveTab(index);
+    });
+
+    tabs.append({btn, index});
+    return btn;
+}
+
+void OutputPanel::setActiveTab(int index)
+{
+    activeTab = index;
+    stack->setCurrentIndex(index);
+
+    for (const auto &t : tabs) {
+        bool isActive = (t.index == index);
+        t.btn->setStyleSheet(
+            isActive
+                ? "QPushButton { background: transparent; color: #d4d4d4; border: none; "
+                  "border-bottom: 2px solid #e6a341; padding: 0 14px; font-size: 11px; "
+                  "font-weight: 600; letter-spacing: 0.3px; }"
+                : "QPushButton { background: transparent; color: #9e9e9e; border: none; "
+                  "border-bottom: 2px solid transparent; padding: 0 14px; font-size: 11px; "
+                  "font-weight: 600; letter-spacing: 0.3px; }"
+            "QPushButton:hover { color: #d4d4d4; }"
+        );
+    }
 }
 
 void OutputPanel::appendOutput(const QString &text)
@@ -57,7 +127,7 @@ void OutputPanel::appendOutput(const QString &text)
 
 void OutputPanel::appendError(const QString &text)
 {
-    output->appendHtml("<span style='color:#f7768e;'>" + text.toHtmlEscaped() + "</span>");
+    output->appendHtml("<span style='color:#e66a41;'>" + text.toHtmlEscaped() + "</span>");
 }
 
 void OutputPanel::clearOutput()
@@ -67,9 +137,43 @@ void OutputPanel::clearOutput()
 
 void OutputPanel::setRunning(bool running)
 {
-    stopBtn->setVisible(running);
-    if (!running)
-        titleLabel->setText("Output");
-    else
-        titleLabel->setText("Running...");
+    if (running) {
+        titleLabel->setText("RUNNING");
+    }
+}
+
+void OutputPanel::addProblem(const QString &file, int line, int col,
+                             const QString &message, const QString &severity)
+{
+    QColor color;
+    if (severity == "1" || severity == "error") color = QColor(Colors::diagError);
+    else if (severity == "2" || severity == "warning") color = QColor(Colors::diagWarning);
+    else color = QColor(Colors::diagInfo);
+
+    auto *item = new QTreeWidgetItem;
+    item->setText(0, QString("[%1] %2:%3  %4")
+                      .arg(severity.left(1).toUpper())
+                      .arg(QFileInfo(file).fileName())
+                      .arg(line + 1)
+                      .arg(message));
+    item->setForeground(0, color);
+    item->setData(0, Qt::UserRole, file);
+    item->setData(0, Qt::UserRole + 1, line);
+    problemTree->addTopLevelItem(item);
+}
+
+void OutputPanel::clearProblems()
+{
+    problemTree->clear();
+}
+
+void OutputPanel::onProblemItemActivated(QTreeWidgetItem *item, int)
+{
+    QString file = item->data(0, Qt::UserRole).toString();
+    int line = item->data(0, Qt::UserRole + 1).toInt();
+    emit problemActivated(file, line);
+}
+
+void OutputPanel::onTabClicked(int)
+{
 }

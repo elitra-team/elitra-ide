@@ -55,20 +55,54 @@ OBJECTS_DIR   = ./
 SOURCES       = src/main.cpp \
 		src/mainwindow.cpp \
 		src/elitrahighlighter.cpp \
+		src/languagehighlighter.cpp \
 		src/codeeditor.cpp \
-		src/outputpanel.cpp moc_mainwindow.cpp \
+		src/outputpanel.cpp \
+		src/findreplacepanel.cpp \
+		src/findinfilespanel.cpp \
+		src/lspclient.cpp \
+		src/settingsdialog.cpp \
+		src/fileiconprovider.cpp \
+		src/activitybar.cpp \
+		src/sidebar.cpp \
+		src/statusbarmanager.cpp moc_mainwindow.cpp \
 		moc_elitrahighlighter.cpp \
+		moc_languagehighlighter.cpp \
 		moc_codeeditor.cpp \
-		moc_outputpanel.cpp
+		moc_outputpanel.cpp \
+		moc_findreplacepanel.cpp \
+		moc_findinfilespanel.cpp \
+		moc_lspclient.cpp \
+		moc_settingsdialog.cpp \
+		moc_activitybar.cpp \
+		moc_sidebar.cpp \
+		moc_statusbarmanager.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		elitrahighlighter.o \
+		languagehighlighter.o \
 		codeeditor.o \
 		outputpanel.o \
+		findreplacepanel.o \
+		findinfilespanel.o \
+		lspclient.o \
+		settingsdialog.o \
+		fileiconprovider.o \
+		activitybar.o \
+		sidebar.o \
+		statusbarmanager.o \
 		moc_mainwindow.o \
 		moc_elitrahighlighter.o \
+		moc_languagehighlighter.o \
 		moc_codeeditor.o \
-		moc_outputpanel.o
+		moc_outputpanel.o \
+		moc_findreplacepanel.o \
+		moc_findinfilespanel.o \
+		moc_lspclient.o \
+		moc_settingsdialog.o \
+		moc_activitybar.o \
+		moc_sidebar.o \
+		moc_statusbarmanager.o
 DIST          = /usr/lib/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt6/mkspecs/common/unix.conf \
 		/usr/lib/qt6/mkspecs/common/linux.conf \
@@ -147,12 +181,31 @@ DIST          = /usr/lib/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt6/mkspecs/features/lex.prf \
 		ElitraIDE.pro src/mainwindow.h \
 		src/elitrahighlighter.h \
+		src/languagehighlighter.h \
 		src/codeeditor.h \
-		src/outputpanel.h src/main.cpp \
+		src/outputpanel.h \
+		src/findreplacepanel.h \
+		src/findinfilespanel.h \
+		src/lspclient.h \
+		src/settingsdialog.h \
+		src/fileiconprovider.h \
+		src/activitybar.h \
+		src/sidebar.h \
+		src/statusbarmanager.h \
+		src/colors.h src/main.cpp \
 		src/mainwindow.cpp \
 		src/elitrahighlighter.cpp \
+		src/languagehighlighter.cpp \
 		src/codeeditor.cpp \
-		src/outputpanel.cpp
+		src/outputpanel.cpp \
+		src/findreplacepanel.cpp \
+		src/findinfilespanel.cpp \
+		src/lspclient.cpp \
+		src/settingsdialog.cpp \
+		src/fileiconprovider.cpp \
+		src/activitybar.cpp \
+		src/sidebar.cpp \
+		src/statusbarmanager.cpp
 QMAKE_TARGET  = ElitraIDE
 DESTDIR       = 
 TARGET        = ElitraIDE
@@ -340,8 +393,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents src/mainwindow.h src/elitrahighlighter.h src/codeeditor.h src/outputpanel.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/elitrahighlighter.cpp src/codeeditor.cpp src/outputpanel.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents src/mainwindow.h src/elitrahighlighter.h src/languagehighlighter.h src/codeeditor.h src/outputpanel.h src/findreplacepanel.h src/findinfilespanel.h src/lspclient.h src/settingsdialog.h src/fileiconprovider.h src/activitybar.h src/sidebar.h src/statusbarmanager.h src/colors.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/elitrahighlighter.cpp src/languagehighlighter.cpp src/codeeditor.cpp src/outputpanel.cpp src/findreplacepanel.cpp src/findinfilespanel.cpp src/lspclient.cpp src/settingsdialog.cpp src/fileiconprovider.cpp src/activitybar.cpp src/sidebar.cpp src/statusbarmanager.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -373,10 +426,11 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_elitrahighlighter.cpp moc_codeeditor.cpp moc_outputpanel.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_elitrahighlighter.cpp moc_languagehighlighter.cpp moc_codeeditor.cpp moc_outputpanel.cpp moc_findreplacepanel.cpp moc_findinfilespanel.cpp moc_lspclient.cpp moc_settingsdialog.cpp moc_activitybar.cpp moc_sidebar.cpp moc_statusbarmanager.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_elitrahighlighter.cpp moc_codeeditor.cpp moc_outputpanel.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_elitrahighlighter.cpp moc_languagehighlighter.cpp moc_codeeditor.cpp moc_outputpanel.cpp moc_findreplacepanel.cpp moc_findinfilespanel.cpp moc_lspclient.cpp moc_settingsdialog.cpp moc_activitybar.cpp moc_sidebar.cpp moc_statusbarmanager.cpp
 moc_mainwindow.cpp: src/mainwindow.h \
+		src/activitybar.h \
 		moc_predefs.h \
 		/usr/lib/qt6/moc
 	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/mainwindow.h -o moc_mainwindow.cpp
@@ -385,6 +439,11 @@ moc_elitrahighlighter.cpp: src/elitrahighlighter.h \
 		moc_predefs.h \
 		/usr/lib/qt6/moc
 	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/elitrahighlighter.h -o moc_elitrahighlighter.cpp
+
+moc_languagehighlighter.cpp: src/languagehighlighter.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/languagehighlighter.h -o moc_languagehighlighter.cpp
 
 moc_codeeditor.cpp: src/codeeditor.h \
 		moc_predefs.h \
@@ -395,6 +454,41 @@ moc_outputpanel.cpp: src/outputpanel.h \
 		moc_predefs.h \
 		/usr/lib/qt6/moc
 	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/outputpanel.h -o moc_outputpanel.cpp
+
+moc_findreplacepanel.cpp: src/findreplacepanel.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/findreplacepanel.h -o moc_findreplacepanel.cpp
+
+moc_findinfilespanel.cpp: src/findinfilespanel.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/findinfilespanel.h -o moc_findinfilespanel.cpp
+
+moc_lspclient.cpp: src/lspclient.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/lspclient.h -o moc_lspclient.cpp
+
+moc_settingsdialog.cpp: src/settingsdialog.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/settingsdialog.h -o moc_settingsdialog.cpp
+
+moc_activitybar.cpp: src/activitybar.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/activitybar.h -o moc_activitybar.cpp
+
+moc_sidebar.cpp: src/sidebar.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/sidebar.h -o moc_sidebar.cpp
+
+moc_statusbarmanager.cpp: src/statusbarmanager.h \
+		moc_predefs.h \
+		/usr/lib/qt6/moc
+	/usr/lib/qt6/moc $(DEFINES) --include '/home/ratimir/Проекты/Elitra IDE/moc_predefs.h' -I/usr/lib/qt6/mkspecs/linux-g++ -I'/home/ratimir/Проекты/Elitra IDE' -I'/home/ratimir/Проекты/Elitra IDE/src' -I/usr/include/qt6 -I/usr/include/qt6/QtWidgets -I/usr/include/qt6/QtGui -I/usr/include/qt6/QtCore -I/usr/include/c++/16.1.1 -I/usr/include/c++/16.1.1/x86_64-pc-linux-gnu -I/usr/include/c++/16.1.1/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/16.1.1/include -I/usr/local/include -I/usr/include src/statusbarmanager.h -o moc_statusbarmanager.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -412,23 +506,69 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-main.o: src/main.cpp src/mainwindow.h
+main.o: src/main.cpp src/mainwindow.h \
+		src/activitybar.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o src/main.cpp
 
 mainwindow.o: src/mainwindow.cpp src/mainwindow.h \
+		src/activitybar.h \
 		src/codeeditor.h \
 		src/outputpanel.h \
-		src/elitrahighlighter.h
+		src/elitrahighlighter.h \
+		src/languagehighlighter.h \
+		src/findreplacepanel.h \
+		src/findinfilespanel.h \
+		src/lspclient.h \
+		src/settingsdialog.h \
+		src/sidebar.h \
+		src/statusbarmanager.h \
+		src/fileiconprovider.h \
+		src/colors.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o src/mainwindow.cpp
 
-elitrahighlighter.o: src/elitrahighlighter.cpp src/elitrahighlighter.h
+elitrahighlighter.o: src/elitrahighlighter.cpp src/elitrahighlighter.h \
+		src/colors.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o elitrahighlighter.o src/elitrahighlighter.cpp
 
-codeeditor.o: src/codeeditor.cpp src/codeeditor.h
+languagehighlighter.o: src/languagehighlighter.cpp src/languagehighlighter.h \
+		src/colors.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o languagehighlighter.o src/languagehighlighter.cpp
+
+codeeditor.o: src/codeeditor.cpp src/codeeditor.h \
+		src/colors.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o codeeditor.o src/codeeditor.cpp
 
-outputpanel.o: src/outputpanel.cpp src/outputpanel.h
+outputpanel.o: src/outputpanel.cpp src/outputpanel.h \
+		src/colors.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o outputpanel.o src/outputpanel.cpp
+
+findreplacepanel.o: src/findreplacepanel.cpp src/findreplacepanel.h \
+		src/codeeditor.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o findreplacepanel.o src/findreplacepanel.cpp
+
+findinfilespanel.o: src/findinfilespanel.cpp src/findinfilespanel.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o findinfilespanel.o src/findinfilespanel.cpp
+
+lspclient.o: src/lspclient.cpp src/lspclient.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lspclient.o src/lspclient.cpp
+
+settingsdialog.o: src/settingsdialog.cpp src/settingsdialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o settingsdialog.o src/settingsdialog.cpp
+
+fileiconprovider.o: src/fileiconprovider.cpp src/fileiconprovider.h \
+		src/colors.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o fileiconprovider.o src/fileiconprovider.cpp
+
+activitybar.o: src/activitybar.cpp src/activitybar.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o activitybar.o src/activitybar.cpp
+
+sidebar.o: src/sidebar.cpp src/sidebar.h \
+		src/fileiconprovider.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sidebar.o src/sidebar.cpp
+
+statusbarmanager.o: src/statusbarmanager.cpp src/statusbarmanager.h \
+		src/fileiconprovider.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o statusbarmanager.o src/statusbarmanager.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -436,11 +576,35 @@ moc_mainwindow.o: moc_mainwindow.cpp
 moc_elitrahighlighter.o: moc_elitrahighlighter.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_elitrahighlighter.o moc_elitrahighlighter.cpp
 
+moc_languagehighlighter.o: moc_languagehighlighter.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_languagehighlighter.o moc_languagehighlighter.cpp
+
 moc_codeeditor.o: moc_codeeditor.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_codeeditor.o moc_codeeditor.cpp
 
 moc_outputpanel.o: moc_outputpanel.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_outputpanel.o moc_outputpanel.cpp
+
+moc_findreplacepanel.o: moc_findreplacepanel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_findreplacepanel.o moc_findreplacepanel.cpp
+
+moc_findinfilespanel.o: moc_findinfilespanel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_findinfilespanel.o moc_findinfilespanel.cpp
+
+moc_lspclient.o: moc_lspclient.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_lspclient.o moc_lspclient.cpp
+
+moc_settingsdialog.o: moc_settingsdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_settingsdialog.o moc_settingsdialog.cpp
+
+moc_activitybar.o: moc_activitybar.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_activitybar.o moc_activitybar.cpp
+
+moc_sidebar.o: moc_sidebar.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_sidebar.o moc_sidebar.cpp
+
+moc_statusbarmanager.o: moc_statusbarmanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_statusbarmanager.o moc_statusbarmanager.cpp
 
 ####### Install
 
